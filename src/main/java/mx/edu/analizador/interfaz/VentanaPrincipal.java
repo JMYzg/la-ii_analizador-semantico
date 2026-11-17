@@ -6,6 +6,7 @@ import mx.edu.analizador.lexico.Token;
 //9999999999999999999999999999999999
 import mx.edu.analizador.semantico.ErrorContinue;
 import mx.edu.analizador.semantico.ErrorSemantico;
+import mx.edu.analizador.semantico.ErrorConversionTipos;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -32,7 +33,7 @@ public class VentanaPrincipal extends JFrame {
             "7 - Uso incorrecto de return",
             "8 - Uso incorrecto de break",
             "9 - Uso incorrecto de continue",
-            "10 - Conversión de tipos de control",
+            "10 - Conversión de tipos no permitida",
             "11 - Operación entre tipos incompatibles",
             "12 - Miembro inexistente de una clase",
             "13 - Llamada incorrecta a un método",
@@ -184,6 +185,20 @@ public class VentanaPrincipal extends JFrame {
                 });
 
             }///////////////////////////
+            // Error 10: Conversión de tipos no permitida
+            List<ErrorSemantico> erroresConversion =
+                    new ErrorConversionTipos().analizar(tokens);
+
+            for (ErrorSemantico error : erroresConversion) {
+                modeloErrores.addRow(new Object[]{
+                        error.getNombre(),
+                        error.getDescripcion(),
+                        error.getLinea(),
+                        error.getInicio(),
+                        error.getFin()
+                });
+            }
+
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
